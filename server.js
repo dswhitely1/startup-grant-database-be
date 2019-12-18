@@ -3,6 +3,8 @@ const cors = require("cors");
 const helmet = require("helmet");
 const server = express();
 const bodyParser = require("body-parser");
+const nodemailer = require("nodemailer");
+require('dotenv').config();
 
 const grantRouter = require("./routers/grantRouter.js");
 const userRouter = require("./routers/userRouter.js");
@@ -17,6 +19,30 @@ const jwtAuthz = require("express-jwt-authz");
 const checkScopesAdmMod = jwtAuthz(["get:adminLocal", "get:adminProduction", "get:adminStaging"]);
 //make this array hidden variable & give those to heroku
 
+// setup for nodemail emialer
+//Step 1
+let transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.NODEMAILER_USER, // setup env with a gmail address
+    pass: process.env.NODEMAILER_PASS // setup env with matching gmail pass
+  }
+});
+// Step 2
+let mailOptions = {
+  from: process.env.NODEMAILER_FROM, // same gmail as user above
+  to: process.env.NODEMAILER_TO, // receiving email
+  subject: "Testing and Testing",
+  text: "the test is working"
+}
+// Step 3 - test with command: node server.js
+transporter.sendMail(mailOptions, function(err, data) {
+  if (err) {
+    console.log("Error occurred", err)
+  } else {
+    console.log("Email was sent")
+  }
+})
 
 server.use(cors());
 server.use(helmet());
