@@ -21,6 +21,9 @@ const checkScopesAdmMod = jwtAuthz(["get:adminLocal", "get:adminProduction", "ge
 
 // setup for nodemail emialer
 //Step 1
+// go to: https://myaccount.google.com/lesssecureapps
+// choose the email in upper right corner
+// switch on less secure app access
 let transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
